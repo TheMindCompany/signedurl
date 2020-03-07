@@ -1,4 +1,4 @@
-# signedurl
+# SignedURL
 
 Generate signed url request for remote storage.  Currently supports AWS S3 but more will come.
 
