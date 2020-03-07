@@ -1,0 +1,9 @@
+FROM rust:stretch
+
+COPY . /opt/signedurl
+
+WORKDIR /opt/signedurl
+
+RUN cargo build --release
+
+CMD ["echo", "Complete!"]
