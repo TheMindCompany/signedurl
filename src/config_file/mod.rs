@@ -53,14 +53,39 @@ impl ConfigurationControl {
 
     pub fn set_aws_env(&self) {
         let creds = self.get_credentials();
-        env::set_var(
-            "AWS_ACCESS_KEY_ID",
-            creds.key,
-        );
-        env::set_var(
-            "AWS_SECRET_ACCESS_KEY",
-            creds.secret,
-        );
+        match env::var("AWS_ACCESS_KEY_ID") {
+            Ok(env_val) => {
+                if env_val.is_empty() {
+                    env::set_var(
+                        "AWS_ACCESS_KEY_ID",
+                        creds.key,
+                    );
+                }
+            },
+            Err(_) => {
+                env::set_var(
+                    "AWS_ACCESS_KEY_ID",
+                    creds.key,
+                );
+            },
+        }
+        match env::var("AWS_SECRET_ACCESS_KEY") {
+            Ok(env_val) => {
+                if env_val.is_empty() {
+                    env::set_var(
+                        "AWS_SECRET_ACCESS_KEY",
+                        creds.secret,
+                    );
+                }
+            },
+            Err(_) => {
+                env::set_var(
+                    "AWS_SECRET_ACCESS_KEY",
+                    creds.secret,
+                );
+            },
+        }
+        env::remove_var("AWS_CREDENTIAL_EXPIRATION");
     }
 
     pub fn get_credentials(&self) -> AwsKeySecret {

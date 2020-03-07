@@ -17,6 +17,10 @@ pub struct ConfigurationSpec {
 
 impl ConfigurationAPI {
 
+    pub fn new() -> ConfigurationAPI {
+        Default::default()
+    }
+    
     pub fn from_values(credential: Credentials) -> ConfigurationAPI {
         ConfigurationAPI {
             kind: String::from("config"),

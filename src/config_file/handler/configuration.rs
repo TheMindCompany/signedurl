@@ -1,6 +1,7 @@
 use crate::config_file::model::{ConfigurationAPI};
 use crate::config_file::handler::GenerateHandler;
 
+use std::env;
 use serde_yaml;
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
@@ -13,8 +14,20 @@ impl ConfigurationHandler {
             Ok(x) => x,
             Err(_) => {
                 eprintln!("No configuration found. Running generator:\n");
-                GenerateHandler::new().run_config_prompt();
-                std::process::exit(1);
+                match (env::var("AWS_ACCESS_KEY_ID"), env::var("AWS_SECRET_ACCESS_KEY")) {
+                    (Ok(key_val), Ok(secret_val)) => {
+                        if key_val.is_empty() || secret_val.is_empty() {
+                            GenerateHandler::new().run_config_prompt();
+                            std::process::exit(1);
+                        } else {
+                            ConfigurationAPI::new()
+                        }
+                    },
+                    _ => {
+                        GenerateHandler::new().run_config_prompt();
+                        std::process::exit(1);
+                    },
+                }
             },
         };
 
