@@ -5,7 +5,7 @@ release: TAG := $(shell read -p "Tag: " tag; echo $$tag)
 
 release:
 	@git push | :
-	#./build_exec.sh
+	./build_exec.sh
 	@git tag ${TAG} | :
 	@git push origin --tags | :
 	curl -X POST --data-binary "@debian" "https://uploads.github.com/repos/TheMindCompany/signedurl/releases/${TAG}/assets?name=debian"
@@ -15,7 +15,7 @@ build:
 	cargo build --release
 	mv ./target/release/$(APP) ./$(APP)
 
-install:
+install: 
 	mv $(APP) /usr/local/bin/$(APP)
 
 clean:

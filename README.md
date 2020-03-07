@@ -4,7 +4,7 @@ Generate signed url request for remote storage.  Currently supports AWS S3 but m
 
 ## TODO
 
- Remaining work for 0.1.0 release:
+ Remaining work for 0.1.* releases:
 
  - AWS S3 signed url high level config (time, region, content-type, ...)
  - Configuration file setting for default high level values
