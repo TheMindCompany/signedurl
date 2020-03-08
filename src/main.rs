@@ -15,46 +15,32 @@ extern crate dirs;
 extern crate rusoto_core;
 extern crate rusoto_credential;
 extern crate rusoto_s3;
-
+extern crate actix_web;
+extern crate actix_rt;
+extern crate tokio;
 extern crate structopt;
 
+mod cli;
+mod daemon;
 mod command_control;
 mod signed_url;
 mod toolbelt;
 mod prompt_user;
 mod config_file;
 
-use config_file::ConfigurationControl;
-use signed_url::SignedUrlRunner;
-use toolbelt::logs::RootLog;
-
+use cli::Cli;
+use daemon::Daemeon;
 use structopt::StructOpt;
 
-#[tokio::main]
-async fn main() {
+#[actix_rt::main]
+async fn main() -> std::io::Result<()> {
     // This is the collection of settings sent from the request.
     let cli_options = command_control::CmdCtl::from_args();
 
-    // This should be passed to any underlying modules and follow verbose logic rules for CLI.
-    let log_config = RootLog::get_logger(
-        cli_options.is_verbose()
-    );
-
-    ConfigurationControl::new().load();
-
-    match cli_options.commands {
-        Some(command_control::Commands::Configurations(_)) => {
-            cli_options.run_command_process();
-        },
-        None => {
-            match SignedUrlRunner::run(&cli_options).await {
-                Ok(signed_url) => {
-                    info!(log_config, "{:#?}", signed_url.as_str());
-                },
-                Err(err) => {
-                    error!(log_config, "{:#?}", err);
-                },
-            }
-        }
+    if !cli_options.daemon {
+        Cli::run_as_cli().await;
+        Ok(())
+    } else {
+        Daemeon::run_as_daemeon().await
     }
 }

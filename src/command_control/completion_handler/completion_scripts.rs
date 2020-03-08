@@ -52,7 +52,7 @@ pub struct CompletionScript { }
 
     case "${cmd}" in
         signedurl)
-            opts=" -v -h -b -k -r -t  --verbose --help --bucket --key --region --timeout  <method>  configuration help"
+            opts=" -d -v -h -b -k -r -t -p  --daemon --verbose --help --bucket --key --region --timeout --port  <method>  configuration help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -88,6 +88,14 @@ pub struct CompletionScript { }
                     return 0
                     ;;
                     -t)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                --port)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                    -p)
                     COMPREPLY=($(compgen -f "${cur}"))
                     return 0
                     ;;
@@ -278,6 +286,8 @@ complete -F _signedurl -o bashdefault -o default signedurl
 complete -c signedurl -n "__fish_use_subcommand" -s k -l key -d 'Key path target. (ie: filename)'
 complete -c signedurl -n "__fish_use_subcommand" -s r -l region -d 'Region target'
 complete -c signedurl -n "__fish_use_subcommand" -s t -l timeout -d 'Duration URL is invalid'
+complete -c signedurl -n "__fish_use_subcommand" -s p -l port -d 'Daemeon mode'
+complete -c signedurl -n "__fish_use_subcommand" -s d -l daemon -d 'Daemon mode'
 complete -c signedurl -n "__fish_use_subcommand" -s v -l verbose -d 'Enable verbose logging'
 complete -c signedurl -n "__fish_use_subcommand" -s h -l help -d 'Prints help information'
 complete -c signedurl -n "__fish_use_subcommand" -f -a "configuration" -d 'Configuration options'
@@ -344,11 +354,15 @@ _signedurl() {
 '--region=[Region target]' \
 '-t+[Duration URL is invalid]' \
 '--timeout=[Duration URL is invalid]' \
+'-p+[Daemeon mode]' \
+'--port=[Daemeon mode]' \
+'-d[Daemon mode]' \
+'--daemon[Daemon mode]' \
 '-v[Enable verbose logging]' \
 '--verbose[Enable verbose logging]' \
 '-h[Prints help information]' \
 '--help[Prints help information]' \
-':method -- The type of method being requested for signing url:_files' \
+'::method -- The type of method being requested for signing url:_files' \
 ":: :_signedurl_commands" \
 "*::: :->signedurl" \
 && ret=0
@@ -609,6 +623,10 @@ Register-ArgumentCompleter -Native -CommandName 'signedurl' -ScriptBlock {
             [CompletionResult]::new('--region', 'region', [CompletionResultType]::ParameterName, 'Region target')
             [CompletionResult]::new('-t', 't', [CompletionResultType]::ParameterName, 'Duration URL is invalid')
             [CompletionResult]::new('--timeout', 'timeout', [CompletionResultType]::ParameterName, 'Duration URL is invalid')
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'Daemeon mode')
+            [CompletionResult]::new('--port', 'port', [CompletionResultType]::ParameterName, 'Daemeon mode')
+            [CompletionResult]::new('-d', 'd', [CompletionResultType]::ParameterName, 'Daemon mode')
+            [CompletionResult]::new('--daemon', 'daemon', [CompletionResultType]::ParameterName, 'Daemon mode')
             [CompletionResult]::new('-v', 'v', [CompletionResultType]::ParameterName, 'Enable verbose logging')
             [CompletionResult]::new('--verbose', 'verbose', [CompletionResultType]::ParameterName, 'Enable verbose logging')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Prints help information')
@@ -739,6 +757,10 @@ edit:completion:arg-completer[signedurl] = [@words]{
             cand --region 'Region target'
             cand -t 'Duration URL is invalid'
             cand --timeout 'Duration URL is invalid'
+            cand -p 'Daemeon mode'
+            cand --port 'Daemeon mode'
+            cand -d 'Daemon mode'
+            cand --daemon 'Daemon mode'
             cand -v 'Enable verbose logging'
             cand --verbose 'Enable verbose logging'
             cand -h 'Prints help information'

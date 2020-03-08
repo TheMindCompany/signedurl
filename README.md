@@ -8,7 +8,7 @@ Generate signed url request for remote storage.  Currently supports AWS S3 but m
 
  - AWS S3 signed url high level config (time, region, content-type, ...)
  - Configuration file setting for default high level values
- - Dameon initialization(http api)
+ - Daemon routes.
 
 ## Install
 
@@ -44,8 +44,10 @@ FLAGS:
 OPTIONS:
     -b, --bucket <bucket>      Bucket target for signature
     -k, --key <key>            Key path target. (ie: filename)
-    -r, --region <region>      Region target [default: us-east-1]
+    -r, --region <region>      Region target [env: AWS_DEFAULT_REGION=]  [default: us-east-1]
     -t, --timeout <timeout>    Duration URL is invalid
+    -d, --daemon <daemon>      Daemon mode
+    -p, --port <port>          Daemeon mode [env: SIGNEDURL_PORT=]  [default: 8080]
 
 ARGS:
     <method>    The type of method being requested for signing url
@@ -56,6 +58,28 @@ SUBCOMMANDS:
 ```
 
 The only required params for a fully configured yaml file will be `method` and `key`.   Currently default parameters for bucket, timeout, etc are in the pipeline to be added.
+
+### Using the CLI
+
+```bash
+signedurl PUT --bucket my-bucket --key path/to/file.txt
+```
+
+```bash
+signedurl GET --bucket my-bucket --key path/to/file.txt
+```
+
+```bash
+signedurl DEL --bucket my-bucket --key path/to/file.txt
+```
+
+### Using as Daemon
+
+Daemon mode runs SignedURL as HTTP REST service.  You can either use the options arguments to predefine route values or environment value equivalents.
+
+```bash
+signedurl --bucket my-bucket --port 443 --daemon
+```
 
 ---
 

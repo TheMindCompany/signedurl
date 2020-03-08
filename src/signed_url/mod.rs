@@ -1,7 +1,6 @@
 mod put;
 mod get;
 mod delete;
-use std::result::Result;
 use rusoto_credential::{ChainProvider, ProvideAwsCredentials};
 use crate::command_control::cmd_model::cmdctl::CmdCtl;
 use std::time::{Duration};
@@ -10,9 +9,7 @@ use std::time::{Duration};
 pub struct SignedUrlRunner {}
 
 impl SignedUrlRunner {
-    pub async fn run(request: &CmdCtl) -> Result<String, ()> {
-        let verbose = request.verbose;
-
+    pub async fn run(request: &CmdCtl) -> std::io::Result<String> {
         let mut credential_provider = ChainProvider::new();
         credential_provider.set_timeout(Duration::from_millis(200));
         let credential = credential_provider
@@ -21,16 +18,16 @@ impl SignedUrlRunner {
 
         match request.method.as_str() {
             "GET" => {
-                Ok(get::get_object_with_presigned_url(&request, &credential))
+                Ok(get::get_object_with_presigned_url(&request, &credential).await)
             },
             "POST" | "PUT" | "UPDATE" => {
-                Ok(put::put_object_with_presigned_url(&request, &credential))
+                Ok(put::put_object_with_presigned_url(&request, &credential).await)
             },
             "DELETE" | "DEL" | "REMOVE" => {
-                Ok(get::get_object_with_presigned_url(&request, &credential))
+                Ok(delete::delete_object_with_presigned_url(&request, &credential).await)
             },
             _ => {
-                Err(())
+                Ok("".to_string())
             },
         }
     }
