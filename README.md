@@ -86,8 +86,6 @@ SUBCOMMANDS:
     help             Prints this message or the help of the given subcommand(s)
 ```
 
-The only required params for a fully configured yaml file will be `method` and `key`.   Currently default parameters for bucket, timeout, etc are in the pipeline to be added.
-
 ### Using the CLI
 
 ```bash
