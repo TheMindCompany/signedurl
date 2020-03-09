@@ -2043,6 +2043,7 @@ dependencies = [
  "structopt",
  "sys-info",
  "tokio",
+ "uuid",
 ]
 
 [[package]]
@@ -2435,6 +2436,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c72f4267aea0c3ec6d07eaabea6ead7c5ddacfafc5e22bcf8d186706851fb4cf"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "uuid"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9fde2f6a4bea1d6e007c4ad38c6839fa71cbb63b6dbf5b595aa38dc9b1093c11"
+dependencies = [
+ "rand",
 ]
 
 [[package]]

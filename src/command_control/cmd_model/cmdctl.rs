@@ -23,6 +23,18 @@ pub struct CmdCtl {
     #[structopt(short = "k", long = "key")]
     pub key: Option<String>,
 
+    /// Let util append filename to key prefix.
+    #[structopt(long = "prefix")]
+    pub prefix: Option<String>,
+
+    /// Don't allow bucket to change.
+    #[structopt(long = "no-buckets")]
+    pub no_edit_bucket: bool,
+
+    /// Generate key's with UUIDv4.
+    #[structopt(short = "g", long = "gen-key")]
+    pub generate_key: bool,
+
     /// Region target.
     // https://docs.aws.amazon.com/general/latest/gr/rande.html#region-names-codes
     #[structopt(short = "r", long = "region", env = "AWS_DEFAULT_REGION", default_value="us-east-1")]
@@ -36,9 +48,13 @@ pub struct CmdCtl {
     #[structopt(short = "d", long = "daemon")]
     pub daemon: bool,
 
-    /// Daemeon mode.
+    /// Daemeon mode port.
     #[structopt(short = "p", long = "port", env = "SIGNEDURL_PORT", default_value="8080")]
     pub port: i32,
+
+    /// Daemeon mode host.
+    #[structopt(short = "h", long = "host", env = "SIGNEDURL_HOST", default_value="127.0.0.1")]
+    pub host: String,
 
     /// Enable verbose logging.
     #[structopt(long = "verbose", short = "v")]

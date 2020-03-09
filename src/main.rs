@@ -19,6 +19,7 @@ extern crate actix_web;
 extern crate actix_rt;
 extern crate tokio;
 extern crate structopt;
+extern crate uuid;
 
 mod cli;
 mod daemon;
