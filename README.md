@@ -1,8 +1,6 @@
 # SignedURL
 
-Generate signed url request for remote storage.  Currently supports AWS S3 but more will come.
-
-Use as a local cli based utility for daily engineering practices or as a HA HTTP REST service.
+Generate signed url request for remote storage.  Currently supports AWS S3 but more will come.  Use as a cli based utility for daily engineering or as a HA HTTP REST service.
 
 ## TODO
 
@@ -32,7 +30,7 @@ make install
 
 ### Configuration
 
-In an effort to make configuration of `signedurl` simple we have defined a single YAML config in place of configured local or environment set credentials.  This config can be found by default base path at `~/.signedurl` and managed through `~/.signedurl/config.yaml`.  To change the base path you can set it with an environment field `CONFIG_SIGNEDURL_BASE`.
+In an effort to make configuration of `signedurl` simple we have defined a YAML config to handle credentials if not already confiogured.  Credentials will first look for service credentials on system and fall back to this `config.yaml` file when not found. This config can managed through `~/.signedurl/config.yaml`.  To change the base path you can set it with an environment field `CONFIG_SIGNEDURL_BASE`.
 
 The first time you run the cli utility you will be prompted to configure existing credentials are not found.  
 
