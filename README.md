@@ -2,6 +2,8 @@
 
 Generate signed url request for remote storage.  Currently supports AWS S3 but more will come.
 
+Use as a local cli based utility for daily engineering practices or as a HA HTTP REST service.
+
 ## TODO
 
  Remaining work for 0.1.* releases:
