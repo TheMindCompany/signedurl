@@ -28,6 +28,32 @@ make build
 make install
 ```
 
+### Configuration
+
+In an effort to make configuration of `signedurl` simple we have defined a single YAML config in place of configured local or environment set credentials.  This config can be found by default base path at `~/.signedurl` and managed through `~/.signedurl/config.yaml`.  To change the base path you can set it with an environment field `CONFIG_SIGNEDURL_BASE`.
+
+The first time you run the cli utility you will be prompted to configure existing credentials are not found.  
+
+**~/.configmanager/config.yaml**  
+```yaml
+kind: config
+version: alpha/1.0
+specs:
+  aws:
+    key: ***
+    secret: ***
+```
+
+### Autocompletion
+
+For convenience purposes autocompletion scripts have been provided for most major shell programs.  Hopefully this make it more useable for daily use if engineers.
+
+More information for each completion script provided:
+
+```bash
+signedurl configuration --help
+```
+
 ## USAGE
 
 Refer to the help menu for details `-h` or `--help`.
@@ -94,7 +120,6 @@ Response:
 ```json
 {
   "data": {
-    "type": "create-signed-url",
     "attributes": {
       "url": "<signed-url>",
       "method": "PUT",
@@ -112,7 +137,6 @@ Response:
 ```json
 {
   "data": {
-    "type": "read-signed-url",
     "attributes": {
       "url": "<signed-url>",
       "method": "GET",
@@ -130,7 +154,6 @@ Response:
 ```json
 {
   "data": {
-    "type": "delete-signed-url",
     "attributes": {
       "url": "<signed-url>",
       "method": "DELETE",
@@ -155,7 +178,6 @@ signedurl --bucket my-bucket --no-buckets --prefix user/bin --gen-key --daemon
 ```json
 {
   "data": {
-    "type": "create-signed-url",
     "attributes": {
       "url": "<signed-url>",
       "method": "PUT",
@@ -173,7 +195,6 @@ Response:
 ```json
 {
   "data": {
-    "type": "read-signed-url",
     "attributes": {
       "url": "<signed-url>",
       "method": "GET",
@@ -191,7 +212,6 @@ Response:
 ```json
 {
   "data": {
-    "type": "delete-signed-url",
     "attributes": {
       "url": "<signed-url>",
       "method": "DELETE",
