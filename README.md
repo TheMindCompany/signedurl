@@ -110,13 +110,13 @@ Daemon mode runs SignedURL as HTTP REST service.  You can either use the options
 
 ---
 
-**Fully Customized Signed Url's Allowed**
+#### Fully Customized Signed Url's Allowed
 
 ```bash
 signedurl --host 0.0.0.0 --port 8080 --daemon
 ```
 
-**GET /create/{bucket}/{key-path:*}**
+##### GET /create/{bucket}/{key-path:*}
 
 Response:  
 ```json
@@ -133,7 +133,7 @@ Response:
 }
 ```
 
-**GET /read/{bucket}/{key-path:*}**
+##### GET /read/{bucket}/{key-path:*}
 
 Response:  
 ```json
@@ -150,7 +150,7 @@ Response:
 }
 ```
 
-**GET /delete/{bucket}/{key-path:*}**
+##### GET /delete/{bucket}/{key-path:*}
 
 Response:  
 ```json
@@ -169,13 +169,13 @@ Response:
 
 ---
 
-**Strongly Defined Signed Url's Only**
+#### Strongly Defined Signed Url's Only
 
 ```bash
 signedurl --bucket my-bucket --no-buckets --prefix user/bin --gen-key --daemon
 ```
 
-**GET /create**
+##### GET /create
 
 ```json
 {
@@ -191,7 +191,7 @@ signedurl --bucket my-bucket --no-buckets --prefix user/bin --gen-key --daemon
 }
 ```
 
-**GET /read/{key-path:*}**
+##### GET /read/{key-path:*}
 
 Response:  
 ```json
@@ -208,7 +208,7 @@ Response:
 }
 ```
 
-**GET /delete/{key-path:*}**
+##### GET /delete/{key-path:*}
 
 Response:  
 ```json
