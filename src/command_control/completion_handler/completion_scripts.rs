@@ -52,7 +52,7 @@ pub struct CompletionScript { }
 
     case "${cmd}" in
         signedurl)
-            opts=" -v -h -b -k -r -t  --verbose --help --bucket --key --region --timeout  <method>  configuration help"
+            opts=" -g -d -v -b -k -r -t -p -h  --no-buckets --gen-key --daemon --verbose --help --bucket --key --prefix --region --timeout --port --host  <method>  configuration help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -75,6 +75,10 @@ pub struct CompletionScript { }
                     COMPREPLY=($(compgen -f "${cur}"))
                     return 0
                     ;;
+                --prefix)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
                 --region)
                     COMPREPLY=($(compgen -f "${cur}"))
                     return 0
@@ -88,6 +92,22 @@ pub struct CompletionScript { }
                     return 0
                     ;;
                     -t)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                --port)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                    -p)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                --host)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                    -h)
                     COMPREPLY=($(compgen -f "${cur}"))
                     return 0
                     ;;
@@ -276,10 +296,16 @@ complete -F _signedurl -o bashdefault -o default signedurl
             println!("{}",r#"
     complete -c signedurl -n "__fish_use_subcommand" -s b -l bucket -d 'Bucket target for signature'
 complete -c signedurl -n "__fish_use_subcommand" -s k -l key -d 'Key path target. (ie: filename)'
+complete -c signedurl -n "__fish_use_subcommand" -l prefix -d 'Let util append filename to key prefix'
 complete -c signedurl -n "__fish_use_subcommand" -s r -l region -d 'Region target'
 complete -c signedurl -n "__fish_use_subcommand" -s t -l timeout -d 'Duration URL is invalid'
+complete -c signedurl -n "__fish_use_subcommand" -s p -l port -d 'Daemeon mode port'
+complete -c signedurl -n "__fish_use_subcommand" -s h -l host -d 'Daemeon mode host'
+complete -c signedurl -n "__fish_use_subcommand" -l no-buckets -d 'Don\'t allow bucket to change'
+complete -c signedurl -n "__fish_use_subcommand" -s g -l gen-key -d 'Generate key\'s with UUIDv4'
+complete -c signedurl -n "__fish_use_subcommand" -s d -l daemon -d 'Daemon mode'
 complete -c signedurl -n "__fish_use_subcommand" -s v -l verbose -d 'Enable verbose logging'
-complete -c signedurl -n "__fish_use_subcommand" -s h -l help -d 'Prints help information'
+complete -c signedurl -n "__fish_use_subcommand" -l help -d 'Prints help information'
 complete -c signedurl -n "__fish_use_subcommand" -f -a "configuration" -d 'Configuration options'
 complete -c signedurl -n "__fish_use_subcommand" -f -a "help" -d 'Prints this message or the help of the given subcommand(s)'
 complete -c signedurl -n "__fish_seen_subcommand_from configuration" -s h -l help -d 'Prints help information'
@@ -340,15 +366,24 @@ _signedurl() {
 '--bucket=[Bucket target for signature]' \
 '-k+[Key path target. (ie: filename)]' \
 '--key=[Key path target. (ie: filename)]' \
+'--prefix=[Let util append filename to key prefix]' \
 '-r+[Region target]' \
 '--region=[Region target]' \
 '-t+[Duration URL is invalid]' \
 '--timeout=[Duration URL is invalid]' \
+'-p+[Daemeon mode port]' \
+'--port=[Daemeon mode port]' \
+'-h+[Daemeon mode host]' \
+'--host=[Daemeon mode host]' \
+'--no-buckets[Don'\''t allow bucket to change]' \
+'-g[Generate key'\''s with UUIDv4]' \
+'--gen-key[Generate key'\''s with UUIDv4]' \
+'-d[Daemon mode]' \
+'--daemon[Daemon mode]' \
 '-v[Enable verbose logging]' \
 '--verbose[Enable verbose logging]' \
-'-h[Prints help information]' \
 '--help[Prints help information]' \
-':method -- The type of method being requested for signing url:_files' \
+'::method -- The type of method being requested for signing url:_files' \
 ":: :_signedurl_commands" \
 "*::: :->signedurl" \
 && ret=0
@@ -605,13 +640,22 @@ Register-ArgumentCompleter -Native -CommandName 'signedurl' -ScriptBlock {
             [CompletionResult]::new('--bucket', 'bucket', [CompletionResultType]::ParameterName, 'Bucket target for signature')
             [CompletionResult]::new('-k', 'k', [CompletionResultType]::ParameterName, 'Key path target. (ie: filename)')
             [CompletionResult]::new('--key', 'key', [CompletionResultType]::ParameterName, 'Key path target. (ie: filename)')
+            [CompletionResult]::new('--prefix', 'prefix', [CompletionResultType]::ParameterName, 'Let util append filename to key prefix')
             [CompletionResult]::new('-r', 'r', [CompletionResultType]::ParameterName, 'Region target')
             [CompletionResult]::new('--region', 'region', [CompletionResultType]::ParameterName, 'Region target')
             [CompletionResult]::new('-t', 't', [CompletionResultType]::ParameterName, 'Duration URL is invalid')
             [CompletionResult]::new('--timeout', 'timeout', [CompletionResultType]::ParameterName, 'Duration URL is invalid')
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'Daemeon mode port')
+            [CompletionResult]::new('--port', 'port', [CompletionResultType]::ParameterName, 'Daemeon mode port')
+            [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Daemeon mode host')
+            [CompletionResult]::new('--host', 'host', [CompletionResultType]::ParameterName, 'Daemeon mode host')
+            [CompletionResult]::new('--no-buckets', 'no-buckets', [CompletionResultType]::ParameterName, 'Don''t allow bucket to change')
+            [CompletionResult]::new('-g', 'g', [CompletionResultType]::ParameterName, 'Generate key''s with UUIDv4')
+            [CompletionResult]::new('--gen-key', 'gen-key', [CompletionResultType]::ParameterName, 'Generate key''s with UUIDv4')
+            [CompletionResult]::new('-d', 'd', [CompletionResultType]::ParameterName, 'Daemon mode')
+            [CompletionResult]::new('--daemon', 'daemon', [CompletionResultType]::ParameterName, 'Daemon mode')
             [CompletionResult]::new('-v', 'v', [CompletionResultType]::ParameterName, 'Enable verbose logging')
             [CompletionResult]::new('--verbose', 'verbose', [CompletionResultType]::ParameterName, 'Enable verbose logging')
-            [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Prints help information')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Prints help information')
             [CompletionResult]::new('configuration', 'configuration', [CompletionResultType]::ParameterValue, 'Configuration options')
             [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Prints this message or the help of the given subcommand(s)')
@@ -735,13 +779,22 @@ edit:completion:arg-completer[signedurl] = [@words]{
             cand --bucket 'Bucket target for signature'
             cand -k 'Key path target. (ie: filename)'
             cand --key 'Key path target. (ie: filename)'
+            cand --prefix 'Let util append filename to key prefix'
             cand -r 'Region target'
             cand --region 'Region target'
             cand -t 'Duration URL is invalid'
             cand --timeout 'Duration URL is invalid'
+            cand -p 'Daemeon mode port'
+            cand --port 'Daemeon mode port'
+            cand -h 'Daemeon mode host'
+            cand --host 'Daemeon mode host'
+            cand --no-buckets 'Don''t allow bucket to change'
+            cand -g 'Generate key''s with UUIDv4'
+            cand --gen-key 'Generate key''s with UUIDv4'
+            cand -d 'Daemon mode'
+            cand --daemon 'Daemon mode'
             cand -v 'Enable verbose logging'
             cand --verbose 'Enable verbose logging'
-            cand -h 'Prints help information'
             cand --help 'Prints help information'
             cand configuration 'Configuration options'
             cand help 'Prints this message or the help of the given subcommand(s)'

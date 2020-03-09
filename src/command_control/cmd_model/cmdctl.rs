@@ -11,6 +11,7 @@ use rusoto_core::Region;
 pub struct CmdCtl {
     /// The type of method being requested for signing url.
     ///
+    #[structopt(default_value="PUT")]
     pub method: String,
 
     /// Bucket target for signature.
@@ -20,15 +21,40 @@ pub struct CmdCtl {
 
     /// Key path target. (ie: filename)
     #[structopt(short = "k", long = "key")]
-    pub key: String,
+    pub key: Option<String>,
+
+    /// Let util append filename to key prefix.
+    #[structopt(long = "prefix")]
+    pub prefix: Option<String>,
+
+    /// Don't allow bucket to change.
+    #[structopt(long = "no-buckets")]
+    pub no_edit_bucket: bool,
+
+    /// Generate key's with UUIDv4.
+    #[structopt(short = "g", long = "gen-key")]
+    pub generate_key: bool,
 
     /// Region target.
-    #[structopt(short = "r", long = "region", default_value="us-east-1")]
+    // https://docs.aws.amazon.com/general/latest/gr/rande.html#region-names-codes
+    #[structopt(short = "r", long = "region", env = "AWS_DEFAULT_REGION", default_value="us-east-1")]
     pub region: String,
 
     /// Duration URL is invalid.
     #[structopt(short = "t", long = "timeout")]
     pub timeout: Option<usize>,
+
+    /// Daemon mode.
+    #[structopt(short = "d", long = "daemon")]
+    pub daemon: bool,
+
+    /// Daemeon mode port.
+    #[structopt(short = "p", long = "port", env = "SIGNEDURL_PORT", default_value="8080")]
+    pub port: i32,
+
+    /// Daemeon mode host.
+    #[structopt(short = "h", long = "host", env = "SIGNEDURL_HOST", default_value="127.0.0.1")]
+    pub host: String,
 
     /// Enable verbose logging.
     #[structopt(long = "verbose", short = "v")]
@@ -46,7 +72,9 @@ impl CmdCtl {
                 commands.process();
                 self
             },
-            None => self
+            None => {
+                self
+            },
         }
     }
 

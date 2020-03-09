@@ -3,10 +3,10 @@ use rusoto_core::credential::{AwsCredentials};
 use rusoto_s3::util::{PreSignedRequest};
 use rusoto_s3::{GetObjectRequest};
 
-pub fn get_object_with_presigned_url(request: &CmdCtl, credentials: &AwsCredentials) -> String {
+pub async fn get_object_with_presigned_url(request: &CmdCtl, credentials: &AwsCredentials) -> String {
     let req = GetObjectRequest {
         bucket: request.clone().bucket.unwrap(),
-        key: request.clone().key.clone(),
+        key: request.clone().key.unwrap(),
         ..Default::default()
     };
     req.get_presigned_url(&request.clone().region(), credentials, &Default::default())
