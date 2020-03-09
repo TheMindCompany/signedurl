@@ -8,7 +8,7 @@ Use as a local cli based utility for daily engineering practices or as a HA HTTP
 
  Remaining work for 0.1.* releases:
 
- - JSON response.
+ - Daemon logging.
  - TTL settings to module.  
 
 ## Install
