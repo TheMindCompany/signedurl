@@ -34,7 +34,7 @@ In an effort to make configuration of `signedurl` simple we have defined a singl
 
 The first time you run the cli utility you will be prompted to configure existing credentials are not found.  
 
-**~/.configmanager/config.yaml**  
+**~/.signedurl/config.yaml**  
 ```yaml
 kind: config
 version: alpha/1.0
