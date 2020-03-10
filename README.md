@@ -66,16 +66,16 @@ FLAGS:
     -g, --gen-key       Generate key's with UUIDv4
     -d, --daemon        Daemon mode
     -v, --verbose       Enable verbose logging
-        --help          Prints help information
+    -h, --help          Prints help information
 
 OPTIONS:
     -b, --bucket <bucket>      Bucket target for signature
     -k, --key <key>            Key path target. (ie: filename)
         --prefix <prefix>      Let util append filename to key prefix
     -r, --region <region>      Region target [env: AWS_DEFAULT_REGION=]  [default: us-east-1]
-    -t, --timeout <timeout>    Duration URL is invalid
-    -p, --port <port>          Daemon mode port [env: SIGNEDURL_PORT=]  [default: 8080]
-    -h, --host <host>          Daemon mode host [env: SIGNEDURL_HOST=]  [default: 127.0.0.1]
+    -t, --timeout <timeout>    Duration URL is invalid in milliseconds [default: 60000]
+        --port <port>          Daemon mode port [env: SIGNEDURL_PORT=]  [default: 8080]
+        --host <host>          Daemon mode host [env: SIGNEDURL_HOST=]  [default: 127.0.0.1]
 
 ARGS:
     <method>    The type of method being requested for signing url [default: PUT]
@@ -220,6 +220,10 @@ Response:
   }
 }
 ```
+___
+
+Find more ways to configure it using `--help` flag. The above two use case examples show routes accessible when deployed with different parameters.
+
 
 ## Benchmark
 
@@ -231,9 +235,11 @@ Benchmark was made using most difficult route that with bottom level exceptions 
 - 16 GB 2400 MHz DDR4
 - Intel UHD Graphics 630 1536 MB
 
+```bash
+ab -n 10000 -c 50 http://127.0.0.1:8080/create
 ```
-$ ab -n 10000 -c 50 http://127.0.0.1:8080/create
 
+```
 Server Software:
 Server Hostname:        127.0.0.1
 Server Port:            8080
@@ -270,11 +276,6 @@ Percentage of the requests served within a certain time (ms)
   99%     67
  100%    125 (longest request)
  ```
-
-
-___
-
-Find more ways to configure it using `--help` flag. The above two use case examples show routes accessible when deployed with different parameters.
 
 ---
 

@@ -40,20 +40,20 @@ pub struct CmdCtl {
     #[structopt(short = "r", long = "region", env = "AWS_DEFAULT_REGION", default_value="us-east-1")]
     pub region: String,
 
-    /// Duration URL is invalid.
-    #[structopt(short = "t", long = "timeout")]
-    pub timeout: Option<usize>,
+    /// Duration URL is invalid in milliseconds.
+    #[structopt(short = "t", long = "timeout", default_value="60000")]
+    pub timeout: u64,
 
     /// Daemon mode.
     #[structopt(short = "d", long = "daemon")]
     pub daemon: bool,
 
-    /// Daemeon mode port.
-    #[structopt(short = "p", long = "port", env = "SIGNEDURL_PORT", default_value="8080")]
+    /// Daemon mode port.
+    #[structopt(long = "port", env = "SIGNEDURL_PORT", default_value="8080")]
     pub port: i32,
 
-    /// Daemeon mode host.
-    #[structopt(short = "h", long = "host", env = "SIGNEDURL_HOST", default_value="127.0.0.1")]
+    /// Daemon mode host.
+    #[structopt(long = "host", env = "SIGNEDURL_HOST", default_value="127.0.0.1")]
     pub host: String,
 
     /// Enable verbose logging.
