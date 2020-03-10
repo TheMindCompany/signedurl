@@ -1,6 +1,6 @@
 # SignedURL
 
-Generate signed url request for remote storage.  Currently supports AWS S3 but more will come.  Use as a cli based utility for daily engineering or as HA HTTP REST service.
+Generate signed url request for remote storage.  Currently supports AWS S3 but more will come.  Use as a cli based utility for daily engineering or as HTTP REST service.
 
 ## Install
 
