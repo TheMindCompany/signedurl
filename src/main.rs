@@ -3,6 +3,8 @@
 extern crate slog;
 #[macro_use]
 extern crate serde_derive;
+#[macro_use]
+extern crate env_logger;
 extern crate serde;
 extern crate serde_yaml;
 extern crate reqwest;
@@ -37,6 +39,8 @@ use structopt::StructOpt;
 async fn main() -> std::io::Result<()> {
     // This is the collection of settings sent from the request.
     let cli_options = command_control::CmdCtl::from_args();
+
+    config_file::ConfigurationControl::new().load();
 
     if !cli_options.daemon {
         Cli::run_as_cli().await;

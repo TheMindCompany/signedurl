@@ -1,11 +1,11 @@
 mod response;
-
+use actix_web::middleware::Logger;
+use env_logger::Env;
 use response::{SignedUrlResponse, SignedUrlAttributes};
-use crate::config_file::ConfigurationControl;
 use crate::signed_url::SignedUrlRunner;
 use crate::command_control;
 use crate::command_control::CmdCtl;
-use actix_web::{web, App, HttpServer, HttpRequest, Responder, HttpResponse};
+use actix_web::{HttpRequest, Responder, HttpResponse};
 use structopt::StructOpt;
 use uuid::Uuid;
 
@@ -143,12 +143,19 @@ impl Daemeon {
     }
 
     pub async fn run_as_daemeon() -> std::io::Result<()> {
+        use actix_web::{web, App, HttpServer};
+
         let options = command_control::CmdCtl::from_args();
         let host = format!("{}:{}", options.host, options.port);
-        ConfigurationControl::new().load();
+
         println!("Listening {:#?}", host);
+
+        env_logger::from_env(Env::default().default_filter_or("info")).init();
+
         HttpServer::new(|| {
             App::new()
+                .wrap(Logger::default())
+                .wrap(Logger::new("%a %P %{User-Agent}i"))
                 .route("/create", web::get().to( Daemeon::put_key ))
                 .route("/create/{bucket}/{key:.*}", web::get().to( Daemeon::put_key_conversion ))
                 .route("/read/{bucket}/{key:.*}", web::get().to( Daemeon::get_key_conversion ))
