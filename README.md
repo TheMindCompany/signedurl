@@ -221,7 +221,7 @@ Find more ways to configure it using `--help` flag. The above two use case examp
 
 ## Benchmark
 
-Benchmark was made using most difficult route that with bottom level exceptions and generating UUIDv4 hash on localhost.
+Benchmark was made using most difficult route that with bottom level exceptions and generating UUIDv4 hash on localhost with a **single core**.
 
 **Test System Spec**
 - Macbook Pro
@@ -229,47 +229,83 @@ Benchmark was made using most difficult route that with bottom level exceptions 
 - 16 GB 2400 MHz DDR4
 - Intel UHD Graphics 630 1536 MB
 
+**1k @ 50 Concurrent Request (More realistic usage)**
+
 ```bash
 ab -n 10000 -c 50 http://127.0.0.1:8080/create
 ```
 
 ```
-Server Software:
-Server Hostname:        127.0.0.1
-Server Port:            8080
-
-Document Path:          /create
-Document Length:        427 bytes
+Document Length:        425 bytes
 
 Concurrency Level:      50
-Time taken for tests:   1.719 seconds
-Complete requests:      10000
+Time taken for tests:   0.393 seconds
+Complete requests:      1000
 Failed requests:        0
-Total transferred:      5360000 bytes
-HTML transferred:       4270000 bytes
-Requests per second:    5817.97 [#/sec] (mean)
-Time per request:       8.594 [ms] (mean)
-Time per request:       0.172 [ms] (mean, across all concurrent requests)
-Transfer rate:          3045.34 [Kbytes/sec] received
+Total transferred:      534000 bytes
+HTML transferred:       425000 bytes
+Requests per second:    2542.56 [#/sec] (mean)
+Time per request:       19.665 [ms] (mean)
+Time per request:       0.393 [ms] (mean, across all concurrent requests)
+Transfer rate:          1325.90 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        0    1   0.6      1       4
-Processing:     1    7  12.4      3     124
-Waiting:        0    7  12.4      2     124
-Total:          1    9  12.3      4     125
+Connect:        0    1   0.6      1       2
+Processing:     1   14  15.0      4      64
+Waiting:        0   14  15.0      4      64
+Total:          2   15  15.2      5      65
 
 Percentage of the requests served within a certain time (ms)
-  50%      4
-  66%      5
-  75%      5
-  80%      7
-  90%     24
-  95%     31
-  98%     43
-  99%     67
- 100%    125 (longest request)
- ```
+  50%      5
+  66%     25
+  75%     29
+  80%     30
+  90%     40
+  95%     43
+  98%     47
+  99%     49
+ 100%     65 (longest request)
+```
+
+**10k @ 100 Concurrent Request(Pushing to extremes)**
+
+```bash
+ab -n 10000 -c 100 http://127.0.0.1:8080/create
+```
+
+```
+Document Length:        425 bytes
+
+Concurrency Level:      100
+Time taken for tests:   3.735 seconds
+Complete requests:      10000
+Failed requests:        0
+Total transferred:      5340000 bytes
+HTML transferred:       4250000 bytes
+Requests per second:    2677.60 [#/sec] (mean)
+Time per request:       37.347 [ms] (mean)
+Time per request:       0.373 [ms] (mean, across all concurrent requests)
+Transfer rate:          1396.33 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    3   2.9      2      17
+Processing:     1   34  36.2     21     219
+Waiting:        1   33  36.1     20     219
+Total:          2   37  36.0     25     220
+
+Percentage of the requests served within a certain time (ms)
+  50%     25
+  66%     40
+  75%     49
+  80%     57
+  90%     92
+  95%    124
+  98%    144
+  99%    152
+ 100%    220 (longest request)
+```
 
 ---
 
