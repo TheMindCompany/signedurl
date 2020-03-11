@@ -232,7 +232,7 @@ Benchmark was made using most difficult route that with bottom level exceptions 
 **1k @ 50 Concurrent Request (More realistic usage)**
 
 ```bash
-ab -n 10000 -c 50 http://127.0.0.1:8080/create
+ab -n 1000 -c 50 http://127.0.0.1:8080/create
 ```
 
 ```
